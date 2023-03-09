@@ -12,8 +12,8 @@ interface Props{
 
 
 const Home: NextPage<Props> = ({data} : Props) => {
-  const language : string | undefined = useRouter().locale;
-  
+  const language = useRouter().locale as keyof typeof TEXTS_BY_LANGUAGE;
+
   if (!data) return null;
   const formatPrice: (price: number) => string = (price) =>
     price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -63,7 +63,7 @@ const Home: NextPage<Props> = ({data} : Props) => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Tienda Libre - {TEXTS_BY_LANGUAGE[language].MAIN.PRODUCTS}</title>
+        <title>Tienda Libre -{TEXTS_BY_LANGUAGE[language].MAIN.PRODUCTS}</title>
         <meta
           name="description"
           content="listado de productos destacados de Tienda Libre"

@@ -11,8 +11,8 @@ interface Props{
 }
 
 const TerminosYCondiciones: NextPage<Props> = ({data}:Props) => {
-  const language = useRouter().locale
-  
+  const language = useRouter().locale as keyof typeof TEXTS_BY_LANGUAGE;
+    
   if (!data) return null;
 
   const { version, tycs } = data;
