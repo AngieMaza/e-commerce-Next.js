@@ -1,27 +1,20 @@
-import type { NextPage } from "next";
+import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import { TEXTS_BY_LANGUAGE } from "../locale/constants";
 import styles from "../styles/Home.module.css";
 import { Product, ProductsAPIResponse } from "../types";
 
-// Por ahora estamos utilizando data mockeada, pero
-// debemos reemplazar esto por información proveniente de la
-// API
-export const data: ProductsAPIResponse = [
-  {
-    id: 1,
-    title: "Mochila con correas",
-    price: 7500,
-    description:
-      "Tu mochila perfecta para el dìa a dìa y salidas de fin de semana. Guarda tu notebook (hasta 15 pulgadas) en la funda acolchada, y protégela de los rayones y golpes",
-    image: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
-    rating: 4,
-  },
-];
+interface Props{
+  data:ProductsAPIResponse
+}
 
-const Home: NextPage = () => {
+
+const Home: NextPage<Props> = ({data} : Props) => {
+  const language : string | undefined = useRouter().locale;
+  
   if (!data) return null;
-
   const formatPrice: (price: number) => string = (price) =>
     price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
@@ -70,14 +63,14 @@ const Home: NextPage = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Tienda Libre - Productos Destacados</title>
+        <title>Tienda Libre - {TEXTS_BY_LANGUAGE[language].MAIN.PRODUCTS}</title>
         <meta
           name="description"
           content="listado de productos destacados de Tienda Libre"
         />
       </Head>
       <main className={styles.main}>
-        <h1>Productos destacados</h1>
+        <h1>{TEXTS_BY_LANGUAGE[language].MAIN.PRODUCTS}</h1>
         <div className={styles.grid}>{data.map(renderProductCard)}</div>
       </main>
       <footer className={styles.footer}>
@@ -95,7 +88,13 @@ const Home: NextPage = () => {
   );
 };
 
-// Aquí debemos agregar el método para obtener la información
-// de la API
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const lan = context.locale
+  const res = await fetch(process.env.BASE_URL+ "/api/products/" + lan)
+  const data : ProductsAPIResponse = await res.json();  
+  return {
+    props: { data }
+  }
+}
 
 export default Home;
