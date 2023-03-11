@@ -1,4 +1,4 @@
-import { NextPage, GetStaticProps } from "next";
+import { NextPage, GetServerSideProps } from "next";
 import React from "react";
 import { TyC, TyCsAPIResponse } from "../types";
 import styles from "../styles/TYC.module.css";
@@ -27,7 +27,7 @@ const TerminosYCondiciones: NextPage<Props> = ({data}:Props) => {
   return (
     <div className={styles.tycContainer}>
       <Head>
-        <title>Tienda Libre - {TEXTS_BY_LANGUAGE[language].MAIN.TYCS}</title>
+        <title>Tienda Libre </title>
         <meta
           name="description"
           content="términos y condiciones de Tienda Libre"
@@ -40,15 +40,12 @@ const TerminosYCondiciones: NextPage<Props> = ({data}:Props) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const lan = context.locale
-  const res = await fetch(process.env.BASE_URL + "/api/tycs/" + lan)
-  const data : TyCsAPIResponse= await res.json()
+  const res = await fetch(process.env.BASE_URL+ "/api/tycs/" + lan)
+  const data :TyCsAPIResponse = await res.json();  
   return {
-      props: {
-          data
-      }
+    props: { data }
   }
 }
-
 export default TerminosYCondiciones;

@@ -63,7 +63,7 @@ const Home: NextPage<Props> = ({data} : Props) => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Tienda Libre -{TEXTS_BY_LANGUAGE[language].MAIN.PRODUCTS}</title>
+        <title>Tienda Libre </title>
         <meta
           name="description"
           content="listado de productos destacados de Tienda Libre"
